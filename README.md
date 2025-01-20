@@ -1,4 +1,7 @@
 Deploy Link: https://atmos-rust.vercel.app/
+
+
+```markdown
 # Atmos 2.0
 
 Atmos 2.0 (Administrative Team Management and Organization System) is a comprehensive project management platform designed to streamline administrative tasks and enhance team collaboration.
@@ -25,7 +28,7 @@ Atmos 2.0 is an advanced project management platform that helps organizations ma
 1. Clone the repository:
     ```sh
     git clone https://github.com/avinashsaroj01/Atmos2.0.git
-    cd Atmos2.0/backend
+    cd Atmos2.0/ATMOS-Server
     ```
 
 2. Install dependencies:
@@ -33,7 +36,7 @@ Atmos 2.0 is an advanced project management platform that helps organizations ma
     npm install
     ```
 
-3. Create a `.env` file in the `backend` directory and add your environment variables:
+3. Create a `.env` file in the `ATMOS-Server` directory and add your environment variables:
     ```env
     DATABASE_URL=your_database_url
     JWT_SECRET=your_jwt_secret
@@ -48,7 +51,7 @@ Atmos 2.0 is an advanced project management platform that helps organizations ma
 
 1. Navigate to the frontend directory:
     ```sh
-    cd ../frontend
+    cd ../ATMOS-Client
     ```
 
 2. Install dependencies:
@@ -87,26 +90,33 @@ Atmos 2.0 is an advanced project management platform that helps organizations ma
 ## Project Structure
 
 ```plaintext
-Atmos2.0/
-├── backend/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   ├── app.js
-│   ├── config.js
-│   └── package.json
-└── frontend/
-    ├── public/
-    ├── src/
-    │   ├── components/
-    │   ├── pages/
-    │   ├── App.js
-    │   └── index.js
-    ├── .gitignore
-    ├── README.md
-    ├── package-lock.json
-    └── package.json
+ATMOS-Client/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── App.js
+│   └── index.js
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── range.js
+
+ATMOS-Server/
+├── config/
+├── controllers/
+├── middlewares/
+├── models/
+├── routes/
+├── services/
+├── utils/
+├── .DS_Store
+├── .gitignore
+├── app.js
+├── package-lock.json
+├── package.json
+├── server.js
+├── README.md
 ```
 
 ## Contributing
