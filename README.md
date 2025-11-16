@@ -1,6 +1,3 @@
-Deploy Link: https://atmos-rust.vercel.app/
-
-
 ```markdown
 # Atmos 2.0
 
