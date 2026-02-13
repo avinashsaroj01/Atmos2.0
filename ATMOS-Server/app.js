@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 // connectDB();
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:3000',  // Frontend URL
+  origin: process.env.CLIENT_URL,  // Frontend URL
   methods: ['GET', 'POST', 'DELETE','PUT','PATCH'],  // Allowed methods
   credentials: true,  // Allow cookies (if necessary)
 }));
