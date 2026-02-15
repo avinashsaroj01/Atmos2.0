@@ -6,7 +6,8 @@ import ProfileSection from "./ProfileSection";
 
 
 const UserProfile = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+console.log(process.env.REACT_APP_BACKEND_URL);
 
   // const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("user")));
   // const [user, setUser] = useState(null);
@@ -16,12 +17,11 @@ const UserProfile = () => {
 
   useEffect(() => {
     async function getUser() {
-        const res = await fetch(`${backendUrl}/user/getUserInfo`, {
-
+      const res = await fetch(`${backendUrl}/user/getUserInfo`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -29,21 +29,16 @@ const UserProfile = () => {
       if (data.success) {
         setUser(data.user);
       }
-
     }
     getUser();
   }, []);
-  console.log(user, 'from user profile');
-
+  console.log(user, "from user profile");
 
   return (
     <>
       {user && <Navbar_v2 user={user} />}
-      {user && (
-        <ProfileSection user={user} setUser={setUser} />
-      )}
+      {user && <ProfileSection user={user} setUser={setUser} />}
     </>
-
   );
 }
 

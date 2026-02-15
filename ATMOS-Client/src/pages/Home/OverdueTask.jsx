@@ -2,7 +2,7 @@ import styles from "./OverdueTask.module.css";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const OverdueTask = ({ user }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [userInfo, setUserInfo] = useState(user);
   const [tasksList, setTasksList] = useState();
@@ -16,8 +16,7 @@ const OverdueTask = ({ user }) => {
 
   useEffect(() => {
     const getTaskLists = async () => {
-        const res = await fetch(`${backendUrl}/task/getTaskList`, {
-
+      const res = await fetch(`${backendUrl}/task/getTaskList`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +82,7 @@ const OverdueTask = ({ user }) => {
                     </h6>
                   </Link>
                 </div>
-              )
+              ),
           )}
         {showImg && (
           <div className={styles.mainTask}>

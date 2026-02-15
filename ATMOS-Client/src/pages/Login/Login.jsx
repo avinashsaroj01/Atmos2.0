@@ -39,34 +39,34 @@ function Login() {
     // }
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        // Log the backend URL for debugging
-        const loginPath = process.env.REACT_APP_BACKEND_URL;
-        console.log("Backend URL:", loginPath);
-    
-        // Fallback if the environment variable is not set
-        const backendUrl = loginPath || "http://localhost:4000";
-    
-        const res = await fetch(`${backendUrl}/user/login`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({ email, password })
-        });
-    
-        const data = await res.json();
-        console.log(data);
-    
-        if (!data.success) {
-            alert(data.message);
-        } else {
-            // dispatch(login(data));
-            localStorage.setItem('token', data.token);
-            navigate('/home');
-        }
+      e.preventDefault();
+
+      // Log the backend URL for debugging
+      const loginPath = process.env.REACT_APP_BACKEND_URL;
+      console.log("Backend URL:", loginPath);
+
+      // Fallback if the environment variable is not set
+      const backendUrl = loginPath;
+
+      const res = await fetch(`${backendUrl}/user/login`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (!data.success) {
+        alert(data.message);
+      } else {
+        // dispatch(login(data));
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+      }
     };
     
 

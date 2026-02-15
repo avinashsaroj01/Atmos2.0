@@ -9,7 +9,7 @@
 // import { Modal } from "@mantine/core";
 // import NoteEditor from "./NoteEditor";
 // const Notes = () => {
-//   const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+//   const backendUrl = process.env.REACT_APP_BACKEND_URL ;
 
 //   const [notes, setNotes] = useState();
 //   const navigate = useNavigate();
@@ -260,7 +260,7 @@ import { Modal } from "@mantine/core";
 import NoteEditor from "./NoteEditor";
 
 const Notes = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
@@ -270,7 +270,12 @@ const Notes = () => {
   const [user, setUser] = useState(null);
 
   const colorCodes = [
-    "#ff6b6b", "#f06595", "#cc5de8", "#845ef7", "#5c7cfa", "#4dabf7"
+    "#ff6b6b",
+    "#f06595",
+    "#cc5de8",
+    "#845ef7",
+    "#5c7cfa",
+    "#4dabf7",
   ];
 
   useEffect(() => {
@@ -325,7 +330,7 @@ const Notes = () => {
     });
     const data = await res.json();
     if (data.success) {
-      setNotes(notes.filter(n => n._id !== note._id)); // Remove the deleted note from the state
+      setNotes(notes.filter((n) => n._id !== note._id)); // Remove the deleted note from the state
     } else {
       console.log(data.message);
     }
@@ -342,9 +347,18 @@ const Notes = () => {
           <div>
             {notes.length > 0 ? (
               notes.map((note) => (
-                <div id="noteboxing" className={styles.wholenote} key={note._id}>
+                <div
+                  id="noteboxing"
+                  className={styles.wholenote}
+                  key={note._id}
+                >
                   <div
-                    style={{ backgroundColor: randomColor[Math.floor(Math.random() * randomColor.length)] }}
+                    style={{
+                      backgroundColor:
+                        randomColor[
+                          Math.floor(Math.random() * randomColor.length)
+                        ],
+                    }}
                     className={styles.noteReal}
                   >
                     <div
@@ -364,9 +378,7 @@ const Notes = () => {
                       </div>
 
                       <div className={styles.bin}>
-                        <div
-                          onClick={() => deleteNote(note)}
-                        >
+                        <div onClick={() => deleteNote(note)}>
                           <img
                             className={styles.binimg}
                             src="https://i.ibb.co/zmnNTkD/bin.png"
@@ -380,8 +392,22 @@ const Notes = () => {
                 </div>
               ))
             ) : (
-              <div style={{ width: "100vw", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                <img width={150} height={150} src="./images/post-it.png" alt="No Notes" />
+              <div
+                style={{
+                  width: "100vw",
+                  height: "100vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  width={150}
+                  height={150}
+                  src="./images/post-it.png"
+                  alt="No Notes"
+                />
                 <p style={{ marginTop: "15px" }}>You don't have any Notes</p>
               </div>
             )}

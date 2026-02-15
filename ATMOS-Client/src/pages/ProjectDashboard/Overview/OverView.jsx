@@ -117,7 +117,7 @@ const memberSelectItems = forwardRef(({ userName, email, _id, value, ...others }
 
 
 const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   // console.log(projectId);
   // console.log(projectInfo);
@@ -128,40 +128,48 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
 
   // console.log(projectInfo, 'projectInfo from over view');
 
-
   const [projectName, setProjectName] = useState(projectInfo.projectName);
-  const [projectStatement, setProjectStatement] = useState(projectInfo.projectStatement);
-  const [projectMission, setProjectMission] = useState(projectInfo.projectMission);
-  const [projectDescription, setProjectDescription] = useState(projectInfo.projectDescription);
-  const [projectGuidelines, setProjectGuidelines] = useState(projectInfo.projectGuidelines);
+  const [projectStatement, setProjectStatement] = useState(
+    projectInfo.projectStatement,
+  );
+  const [projectMission, setProjectMission] = useState(
+    projectInfo.projectMission,
+  );
+  const [projectDescription, setProjectDescription] = useState(
+    projectInfo.projectDescription,
+  );
+  const [projectGuidelines, setProjectGuidelines] = useState(
+    projectInfo.projectGuidelines,
+  );
   const [selectedTeamMember, setSelectedTeamMember] = useState(null);
-  const [selectedTransferMember, setSelectedTransferMember] = useState('');
+  const [selectedTransferMember, setSelectedTransferMember] = useState("");
   const [selectedRole, setSelectedRole] = useState(null);
   const [opened, setOpened] = useState(false);
   const [openTransferModal, setOpenTransferModal] = useState(false);
   const [userList, setUserList] = useState([]);
-  const [userAccessLevel, setUserAccessLevel] = useState('no access');
+  const [userAccessLevel, setUserAccessLevel] = useState("no access");
   const [rerender, setRerender] = useState(false);
   const projectOwnerId = projectInfo.projectOwner._id;
 
   useEffect(() => {
     const project = async () => {
-      const res = await fetch(`${backendUrl}/project/getProjectDetails/${projectId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      const res = await fetch(
+        `${backendUrl}/project/getProjectDetails/${projectId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
-      });
+      );
       const data = await res.json();
       // console.log(data, 'projectInfo from main view');
       setProjectInfo(data.project);
       return data;
-    }
+    };
     project();
   }, [rerender]);
-
-
 
   const setAccessLevelFunc = () => {
     if (projectInfo && userInfo) {
@@ -169,41 +177,46 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
       // console.log(userInfo, projectInfo);
       if (userInfo._id === projectInfo.projectOwner._id) {
         // console.log('owner');
-        setUserAccessLevel('owner');
-      }
-      else if (projectInfo.projectHighAccessMembers.find((member) => member._id === userInfo._id)) {
+        setUserAccessLevel("owner");
+      } else if (
+        projectInfo.projectHighAccessMembers.find(
+          (member) => member._id === userInfo._id,
+        )
+      ) {
         // console.log('high');
-        setUserAccessLevel('high');
-      }
-      else if (projectInfo.projectMediumAccessMembers.find((member) => member._id === userInfo._id)) {
+        setUserAccessLevel("high");
+      } else if (
+        projectInfo.projectMediumAccessMembers.find(
+          (member) => member._id === userInfo._id,
+        )
+      ) {
         // console.log('medium');
-        setUserAccessLevel('medium');
-      }
-      else if (projectInfo.projectLowAccessMembers.find((member) => member._id === userInfo._id)) {
+        setUserAccessLevel("medium");
+      } else if (
+        projectInfo.projectLowAccessMembers.find(
+          (member) => member._id === userInfo._id,
+        )
+      ) {
         // console.log('low');
-        setUserAccessLevel('low');
-      }
-      else {
+        setUserAccessLevel("low");
+      } else {
         // console.log('no access');
-        setUserAccessLevel('no access');
+        setUserAccessLevel("no access");
       }
     }
-  }
+  };
 
   useEffect(() => {
     setAccessLevelFunc();
   }, [projectInfo, userInfo]);
 
-
-
   useEffect(() => {
     const res = async () => {
-        const response = await fetch(`${backendUrl}/user/getUserList/`, {
-
+      const response = await fetch(`${backendUrl}/user/getUserList/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await response.json();
@@ -217,25 +230,24 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
 
       setUserList(data.userList);
       return data;
-    }
+    };
     res();
-
-
   }, []);
-
 
   const filteredUserList = userList.filter((user) => {
     let flag = !projectInfo.projectHighAccessMembers.find((member) => {
       return member._id === user._id;
     });
-    flag = flag && !projectInfo.projectMediumAccessMembers.find((member) => {
-      return member._id === user._id;
-    }
-    );
-    flag = flag && !projectInfo.projectLowAccessMembers.find((member) => {
-      return member._id === user._id;
-    }
-    );
+    flag =
+      flag &&
+      !projectInfo.projectMediumAccessMembers.find((member) => {
+        return member._id === user._id;
+      });
+    flag =
+      flag &&
+      !projectInfo.projectLowAccessMembers.find((member) => {
+        return member._id === user._id;
+      });
     return flag;
   });
 
@@ -243,44 +255,49 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
     // only user that are not the owner of the project
     let flag = user._id !== projectInfo.projectOwner._id;
     //only users that are not already the owner of the project and are high access members
-    flag = flag && projectInfo.projectHighAccessMembers.find((member) => {
-      return member._id === user._id;
-    });
+    flag =
+      flag &&
+      projectInfo.projectHighAccessMembers.find((member) => {
+        return member._id === user._id;
+      });
 
     return flag;
   });
 
   // console.log(transferOwnershipUserList, "transferOwnershipUserList");
 
-
-
-
-  const roleList = [{
-    value: 'highAccess',
-    label: 'High'
-  }, {
-    value: 'mediumAccess',
-    label: 'Medium'
-  }, {
-    value: 'lowAccess',
-    label: 'Low'
-  }]
+  const roleList = [
+    {
+      value: "highAccess",
+      label: "High",
+    },
+    {
+      value: "mediumAccess",
+      label: "Medium",
+    },
+    {
+      value: "lowAccess",
+      label: "Low",
+    },
+  ];
 
   const addTeamMember = async () => {
     // console.log(selectedTeamMember, selectedRole, "Add Team Member Data");
 
-    const response = await fetch(`${backendUrl}/project/addTeamMember/${projectId}`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
+    const response = await fetch(
+      `${backendUrl}/project/addTeamMember/${projectId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          userId: selectedTeamMember,
+          accessLevel: selectedRole,
+        }),
       },
-      body: JSON.stringify({
-        userId: selectedTeamMember,
-        accessLevel: selectedRole
-
-      })
-    });
+    );
 
     const data = await response.json();
     // console.log(data);
@@ -291,50 +308,56 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
       setSelectedRole(null);
       setRerender(!rerender);
     }
-  }
+  };
   const handleMemberChange = (option) => {
     // console.log(option);
     setSelectedTeamMember(option);
     // console.log(selectedTeamMember, "selectedTeamMember");
-  }
+  };
 
   const handleRoleChange = (option) => {
     // console.log(option);
     setSelectedRole(option);
-  }
+  };
   const handleTransferMemberChange = (option) => {
     // console.log(option);
     setSelectedTransferMember(option);
     // console.log(selectedTransferMember, "selectedTransferMember");
-  }
+  };
 
   const handleDeleteProject = async () => {
-    const res = await fetch(`${backendUrl}/project/deleteProject/${projectId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem("token")}`
+    const res = await fetch(
+      `${backendUrl}/project/deleteProject/${projectId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
-    })
+    );
 
     const data = await res.json();
 
     if (data.success) {
       console.log(data.message);
-      navigate('/projects');
+      navigate("/projects");
     }
-  }
+  };
   const handleTransfer = async () => {
     // console.log(selectedTransferMember, "newOwner");
-    const res = await fetch(`${backendUrl}/project/transferOwnership/${projectId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+    const res = await fetch(
+      `${backendUrl}/project/transferOwnership/${projectId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          newOwner: selectedTransferMember,
+        }),
       },
-      body: JSON.stringify({
-        newOwner: selectedTransferMember
-      })
-    });
+    );
 
     const data = await res.json();
 
@@ -342,64 +365,86 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
       console.log(data.message);
       setSelectedTransferMember(null);
       setOpenTransferModal(false);
-      navigate('/projects');
+      navigate("/projects");
     }
-  }
+  };
 
   const openDeleteModal = () =>
     openConfirmModal({
-      title: 'Delete Project',
+      title: "Delete Project",
       centered: true,
       children: (
         <Text size="sm">
-          This action cannot be undone.
-          This will <b>permanently delete</b> the <b>{projectInfo.projectName}</b> project, and sections, tasks, comments and remove all collaborator associations.
+          This action cannot be undone. This will <b>permanently delete</b> the{" "}
+          <b>{projectInfo.projectName}</b> project, and sections, tasks,
+          comments and remove all collaborator associations.
           <b> Are you sure you want to delete your project?</b>
         </Text>
       ),
-      labels: { confirm: 'Delete Project', cancel: "No don't delete it" },
-      confirmProps: { color: 'red' },
-      onCancel: () => console.log('Cancel'),
+      labels: { confirm: "Delete Project", cancel: "No don't delete it" },
+      confirmProps: { color: "red" },
+      onCancel: () => console.log("Cancel"),
       onConfirm: () => handleDeleteProject(),
     });
 
   return (
-
     <div className={styles.overviewMainView}>
-      <Flex gap={20} sx={{ flexWrap: 'wrap' }}>
-        <MediaQuery smallerThan={1200} styles={classes.responsiveaboutProjectMainView}>
-
-          <Paper sx={{ minWidth: '70vw' }} withBorder p={'10px'}>
-            <Flex direction={'column'} sx={classes.aboutProjectMainView}>
-              <Title mb={'10px'} sx={classes.teamMembersHeading}>About Project</Title>
+      <Flex gap={20} sx={{ flexWrap: "wrap" }}>
+        <MediaQuery
+          smallerThan={1200}
+          styles={classes.responsiveaboutProjectMainView}
+        >
+          <Paper sx={{ minWidth: "70vw" }} withBorder p={"10px"}>
+            <Flex direction={"column"} sx={classes.aboutProjectMainView}>
+              <Title mb={"10px"} sx={classes.teamMembersHeading}>
+                About Project
+              </Title>
               {/* <div className={styles.descriptionArenaDescription}> */}
               <DescriptionComponent
                 heading="Project Statement"
-                description={projectStatement !== "" ? projectStatement : "What is your project about?"}
+                description={
+                  projectStatement !== ""
+                    ? projectStatement
+                    : "What is your project about?"
+                }
               />
               <DescriptionComponent
                 heading="Project Mission"
-                description={projectMission !== "" ? projectMission : "Write about the mission of your project"}
+                description={
+                  projectMission !== ""
+                    ? projectMission
+                    : "Write about the mission of your project"
+                }
               />
               <DescriptionComponent
                 heading="Project Description"
-                description={projectDescription !== "" ? projectDescription : "Describe your project for your team mates."}
+                description={
+                  projectDescription !== ""
+                    ? projectDescription
+                    : "Describe your project for your team mates."
+                }
               />
               <DescriptionComponent
                 heading="Project Guidelines"
-                description={projectGuidelines !== "" ? projectGuidelines : "Share the guidelines of the project with your team mates."}
+                description={
+                  projectGuidelines !== ""
+                    ? projectGuidelines
+                    : "Share the guidelines of the project with your team mates."
+                }
               />
               {/* </div> */}
-
             </Flex>
-
           </Paper>
         </MediaQuery>
 
         <MediaQuery smallerThan={1200} styles={classes.responsiveTeamMembers}>
-          <Paper sx={{ minWidth: '25vw', maxHeight: '700px', minHeight: '700px' }} withBorder p={'10px'}>
-            <Title mb={'10px'}>Team Members</Title>
-            <Box sx={classes.teamMemberList} >
+          <Paper
+            sx={{ minWidth: "25vw", maxHeight: "700px", minHeight: "700px" }}
+            withBorder
+            p={"10px"}
+          >
+            <Title mb={"10px"}>Team Members</Title>
+            <Box sx={classes.teamMemberList}>
               {projectInfo.projectHighAccessMembers.map((member, index) => {
                 return (
                   <TeamMemberCard
@@ -416,7 +461,7 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
                     rerender={rerender}
                     setRerender={setRerender}
                   />
-                )
+                );
               })}
               {projectInfo.projectMediumAccessMembers.map((member, index) => {
                 return (
@@ -434,7 +479,7 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
                     rerender={rerender}
                     setRerender={setRerender}
                   />
-                )
+                );
               })}
               {projectInfo.projectLowAccessMembers.map((member, index) => {
                 return (
@@ -452,14 +497,12 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
                     rerender={rerender}
                     setRerender={setRerender}
                   />
-                )
+                );
               })}
             </Box>
-            {
-              (
-                userAccessLevel === "high" || userAccessLevel === "medium" || userAccessLevel === "owner"
-              ) &&
-
+            {(userAccessLevel === "high" ||
+              userAccessLevel === "medium" ||
+              userAccessLevel === "owner") && (
               <>
                 <Modal
                   opened={opened}
@@ -486,7 +529,14 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
                     // maxDropdownHeight={100}
                     withinPortal
                     nothingFound="Nobody here"
-                    filter={(value, item) => item.email.toLowerCase().includes(value.toLowerCase().trim()) || item.userName.toLowerCase().includes(value.toLowerCase().trim())}
+                    filter={(value, item) =>
+                      item.email
+                        .toLowerCase()
+                        .includes(value.toLowerCase().trim()) ||
+                      item.userName
+                        .toLowerCase()
+                        .includes(value.toLowerCase().trim())
+                    }
                   />
                   <Select
                     label="Choose a role for the team member"
@@ -496,94 +546,120 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
                     withinPortal
                     onChange={handleRoleChange}
                   />
-                  <Button onClick={addTeamMember} color="blue" mt={'30px'}>Add Team Member</Button>
+                  <Button onClick={addTeamMember} color="blue" mt={"30px"}>
+                    Add Team Member
+                  </Button>
                 </Modal>
                 <Group position="center">
-                  <Button onClick={() => setOpened(true)}>Add Team Member</Button>
+                  <Button onClick={() => setOpened(true)}>
+                    Add Team Member
+                  </Button>
                 </Group>
               </>
-            }
+            )}
           </Paper>
         </MediaQuery>
-
       </Flex>
 
-
-
-
-
-
-      {(userAccessLevel == 'owner') && <Paper sx={{ minWidth: 'calc(100vw - 65px)' }} p={'10px'} mt={'20px'}>
-        <Title mb={'10px'}>Project Settings</Title>
-        <Flex direction={'column'} sx={classes.outerSettingContainer}>
-          {userAccessLevel == 'owner' && <Flex direction={'row'} sx={classes.innerSettingContainer}>
-            <Flex direction={'column'} >
-              <Flex sx={{ flex: 1 }}>
-                <Title order={4}>Delete Project</Title>
+      {userAccessLevel == "owner" && (
+        <Paper sx={{ minWidth: "calc(100vw - 65px)" }} p={"10px"} mt={"20px"}>
+          <Title mb={"10px"}>Project Settings</Title>
+          <Flex direction={"column"} sx={classes.outerSettingContainer}>
+            {userAccessLevel == "owner" && (
+              <Flex direction={"row"} sx={classes.innerSettingContainer}>
+                <Flex direction={"column"}>
+                  <Flex sx={{ flex: 1 }}>
+                    <Title order={4}>Delete Project</Title>
+                  </Flex>
+                  <Flex sx={{ flex: 1 }}>
+                    <Text>
+                      Once you delete a project, there is no going back. Please
+                      be certain.
+                    </Text>
+                  </Flex>
+                </Flex>
+                <Button onClick={openDeleteModal} color="red">
+                  Delete Project
+                </Button>
               </Flex>
-              <Flex sx={{ flex: 1 }}>
-                <Text>Once you delete a project, there is no going back. Please be certain.</Text>
+            )}
+
+            {userAccessLevel == "owner" && (
+              <Flex
+                direction={"row"}
+                justify={"center"}
+                align={"center"}
+                sx={classes.innerSettingContainer}
+              >
+                <Flex direction={"column"}>
+                  <Flex>
+                    <Title order={4}>Transfer Project</Title>
+                  </Flex>
+                  <Flex>
+                    <Text>
+                      Transfer this project to another user or to an
+                      organization where you have the ability to create
+                      projects.
+                    </Text>
+                  </Flex>
+                </Flex>
+
+                <Modal
+                  opened={openTransferModal}
+                  onClose={() => {
+                    setOpenTransferModal(false);
+                    setSelectedTransferMember(null);
+                  }}
+                  title="Transfer Ownership"
+                  centered
+                  size="xl"
+                >
+                  <>
+                    <Text size="sm">
+                      This action cannot be undone. This will{" "}
+                      <b>permanently transfer</b> the ownership of{" "}
+                      <b>{projectInfo.projectName}</b> project.
+                      <b> Are you sure you want to transfer your project?</b>
+                    </Text>
+                    <hr></hr>
+                    <Select
+                      label="Choose a team member to transfer project to (only with high access level)"
+                      placeholder="Pick a User"
+                      value={selectedTransferMember}
+                      onChange={handleTransferMemberChange}
+                      itemComponent={memberSelectItems}
+                      data={transferOwnershipUserList}
+                      searchable
+                      // maxDropdownHeight={1000}
+                      nothingFound="Nobody here"
+                      filter={(value, item) =>
+                        item.email
+                          .toLowerCase()
+                          .includes(value.toLowerCase().trim()) ||
+                        item.userName
+                          .toLowerCase()
+                          .includes(value.toLowerCase().trim())
+                      }
+                      withinPortal
+                    />
+                    <hr></hr>
+                    <Button onClick={handleTransfer} color="blue" mt={"30px"}>
+                      Transfer Project
+                    </Button>
+                  </>
+                </Modal>
+
+                <Button
+                  onClick={() => setOpenTransferModal(true)}
+                  variant={"danger"}
+                >
+                  Transfer Project
+                </Button>
               </Flex>
-            </Flex>
-            <Button onClick={openDeleteModal} color="red">Delete Project</Button>
-          </Flex>}
-
-          {userAccessLevel == 'owner' && <Flex direction={'row'} justify={'center'} align={'center'} sx={classes.innerSettingContainer}>
-            <Flex direction={'column'} >
-              <Flex>
-                <Title order={4}>Transfer Project</Title>
-              </Flex>
-              <Flex>
-                <Text>Transfer this project to another user or to an organization where you have the ability to create projects.</Text>
-              </Flex>
-            </Flex>
-
-            <Modal
-              opened={openTransferModal}
-              onClose={() => {
-                setOpenTransferModal(false);
-                setSelectedTransferMember(null);
-              }}
-              title="Transfer Ownership"
-              centered
-              size="xl"
-            >
-              <>
-                <Text size="sm">
-                  This action cannot be undone.
-                  This will <b>permanently transfer</b> the ownership of <b>{projectInfo.projectName}</b> project.
-                  <b> Are you sure you want to transfer your project?</b>
-                </Text>
-                <hr></hr>
-                < Select
-                  label="Choose a team member to transfer project to (only with high access level)"
-                  placeholder="Pick a User"
-                  value={selectedTransferMember}
-                  onChange={handleTransferMemberChange}
-                  itemComponent={memberSelectItems}
-                  data={transferOwnershipUserList}
-                  searchable
-                  // maxDropdownHeight={1000}
-                  nothingFound="Nobody here"
-                  filter={(value, item) => item.email.toLowerCase().includes(value.toLowerCase().trim()) || item.userName.toLowerCase().includes(value.toLowerCase().trim())}
-                  withinPortal
-
-                />
-                <hr></hr>
-                <Button onClick={handleTransfer} color="blue" mt={'30px'}>Transfer Project</Button>
-              </>
-
-
-
-            </Modal>
-
-            <Button onClick={() => setOpenTransferModal(true)} variant={'danger'}>Transfer Project</Button>
+            )}
           </Flex>
-          }
-        </Flex>
-      </Paper>
-      }
-
+        </Paper>
+      )}
 
       {/* <Paper>
         <Title mb={'10px'} sx={styles.teamMembersHeading}>Team Members</Title>
@@ -620,8 +696,6 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
           })}
         </Paper>
       </Paper> */}
-
-
 
       {/* <div className={styles.overviewMainView}>
       <div className={styles.teamMembersArena}>
@@ -800,8 +874,7 @@ const OverView = ({ projectId, projectInfo, setProjectInfo, userInfo }) => {
         </Modal.Footer>
       </Modal>
       </div> */}
-    </div >
-
+    </div>
   );
 };
 

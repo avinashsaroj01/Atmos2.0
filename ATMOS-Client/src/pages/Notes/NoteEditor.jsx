@@ -45,7 +45,7 @@
 //     ],
 //     content,
 //   });
-//   const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+//   const backendUrl = process.env.REACT_APP_BACKEND_URL ;
 
 //   useEffect(() => {
 //     const notes = async () => {
@@ -216,8 +216,8 @@ const NoteEditor = ({
   setRerender,
 }) => {
   const navigate = useNavigate();
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
-  
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   // Initialize the Tiptap editor
   const editor = useEditor({
     extensions: [
@@ -240,7 +240,7 @@ const NoteEditor = ({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await res.json();
@@ -262,7 +262,7 @@ const NoteEditor = ({
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         NoteId: selectedNote,
@@ -294,7 +294,7 @@ const NoteEditor = ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         description: maincontent,
@@ -357,7 +357,7 @@ const NoteEditor = ({
 
         <RichTextEditor.Content />
       </RichTextEditor>
-      
+
       <Button
         onClick={() => {
           if (!selectedNote) {

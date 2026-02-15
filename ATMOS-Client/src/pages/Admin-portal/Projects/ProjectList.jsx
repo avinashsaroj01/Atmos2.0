@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 
 const ProjectList = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const [user, setUser] = useState();
   const [projects, setProjects] = useState();
 
@@ -35,7 +35,7 @@ const ProjectList = () => {
         {projects && <Datatable alldata={projects} type="projects" />}
       </div>
     </div>
-  )
+  );
 }
 
 export default ProjectList

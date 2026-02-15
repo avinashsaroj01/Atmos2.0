@@ -6,19 +6,18 @@ import Navbar from "../../UI/Navbar";
 import Navbar_v2 from "../../UI/Navbar_v2";
 
 const Projects = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [projectInfo, setProjectInfo] = useState(null);
   const [user, setUser] = useState(null);
   useEffect(() => {
     // console.log('use effect from home');
     const getUser = async () => {
-        const res = await fetch(`${backendUrl}/user/getUserInfo`, {
-
+      const res = await fetch(`${backendUrl}/user/getUserInfo`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -30,16 +29,13 @@ const Projects = () => {
     getUser();
   }, []);
 
-
   useEffect(() => {
     const projects = async () => {
-        const res = await fetch(`${backendUrl}/project/getUserProjects`, {
-
-
+      const res = await fetch(`${backendUrl}/project/getUserProjects`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await res.json();

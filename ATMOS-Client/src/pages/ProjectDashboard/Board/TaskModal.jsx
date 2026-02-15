@@ -18,15 +18,13 @@ const TaskModal = ({
   AssigneeList,
   userInfo,
 }) => {
-
   const dateFormater = (date) => {
     let newDate = new Date(date);
     // console.log(newDate, "newDate");
-    const offset = newDate.getTimezoneOffset()
-    newDate = new Date(newDate.getTime() - (offset * 60 * 1000))
-    return newDate.toISOString().split('T')[0]
-  }
-
+    const offset = newDate.getTimezoneOffset();
+    newDate = new Date(newDate.getTime() - offset * 60 * 1000);
+    return newDate.toISOString().split("T")[0];
+  };
 
   const taskCompletionOptions = [
     { value: true, label: "Yes" },
@@ -84,27 +82,43 @@ const TaskModal = ({
   const [taskAssignee, setTaskAssignee] = useState(taskInfo.taskAssigneeList);
   const [taskPriority, setTaskPriority] = useState(taskInfo.taskPriority);
   const [taskStatus, setTaskStatus] = useState(taskInfo.taskStatus);
-  const [taskDeadline, setTaskDeadline] = useState(dateFormater(taskInfo.taskDeadline));
+  const [taskDeadline, setTaskDeadline] = useState(
+    dateFormater(taskInfo.taskDeadline),
+  );
   const [taskStartDate, SetTaskStartDate] = useState(taskInfo.taskStartDate);
-  const [taskDescription, setTaskDescription] = useState(taskInfo.taskDescription);
+  const [taskDescription, setTaskDescription] = useState(
+    taskInfo.taskDescription,
+  );
   const [taskComments, setTaskComments] = useState(taskInfo.taskComments);
-  const [selectedAssignee, setSelectedAssignee] = useState({ value: taskAssignee, label: taskAssigneeLabel, });
-  const [selectedCompletion, setSelectedCompletion] = useState({ value: taskCompletion, label: taskCompletionLabel, });
-  const [selectedPriority, setSelectedPriority] = useState({ value: taskPriority, label: taskPriorityLabel, });
-  const [selectedStatus, setSelectedStatus] = useState({ value: taskStatus, label: taskStatusLabel, });
-  const [updateTaskAssignee, setUpdateTaskAssignee] = useState({ do: false, oldAssignee: null, });
+  const [selectedAssignee, setSelectedAssignee] = useState({
+    value: taskAssignee,
+    label: taskAssigneeLabel,
+  });
+  const [selectedCompletion, setSelectedCompletion] = useState({
+    value: taskCompletion,
+    label: taskCompletionLabel,
+  });
+  const [selectedPriority, setSelectedPriority] = useState({
+    value: taskPriority,
+    label: taskPriorityLabel,
+  });
+  const [selectedStatus, setSelectedStatus] = useState({
+    value: taskStatus,
+    label: taskStatusLabel,
+  });
+  const [updateTaskAssignee, setUpdateTaskAssignee] = useState({
+    do: false,
+    oldAssignee: null,
+  });
   const [description, setDescription] = useState(true);
   const [comments, setComments] = useState(false);
-
 
   // console.log(taskStartDate, "taskInfo.taskStartDate");
   // console.log(taskDeadline, "taskInfo.taskDeadline");
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
-
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleSubmit = async (taskId, sectionId, sectionInfo) => {
-
     // fix for now
     let is2dArray = false;
     if (Array.isArray(taskAssignee)) {
@@ -112,7 +126,6 @@ const TaskModal = ({
     }
     // console.log(taskAssignee, "from modal")
     // console.log(is2dArray, "from modal");
-
 
     const task = {
       taskId,
@@ -127,15 +140,17 @@ const TaskModal = ({
       taskCreator: userInfo._id,
       taskCreatedAt: new Date(),
       taskDeadline,
-      taskComments
+      taskComments,
     };
 
     console.log(task, "from modal");
 
-      const response = await fetch(`${backendUrl}/task/updateTask`, {
-
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem("token")}` },
+    const response = await fetch(`${backendUrl}/task/updateTask`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify({
         taskId,
         taskName,
@@ -148,8 +163,8 @@ const TaskModal = ({
         taskProjectId: projectInfo._id,
         taskCreator: userInfo._id,
         taskDeadline,
-        taskComments
-      })
+        taskComments,
+      }),
     });
 
     const taskData = await response.json();
@@ -157,7 +172,6 @@ const TaskModal = ({
 
     setRerender(!rerender);
     closeModal();
-
   };
 
   const handleTaskAssignee = (selectedOption) => {
@@ -625,7 +639,11 @@ const TaskModal = ({
                   <input
                     className="modal-input modal-select"
                     type="date"
-                    value={taskDeadline == '1970-01-01' ? taskStartDate : taskDeadline}
+                    value={
+                      taskDeadline == "1970-01-01"
+                        ? taskStartDate
+                        : taskDeadline
+                    }
                     onChange={(e) => setTaskDeadline(e.target.value)}
                   ></input>
                 </td>
@@ -687,7 +705,7 @@ const TaskModal = ({
           </Button>
         </Modal.Footer>
       </Modal>
-    </div >
+    </div>
   );
 };
 

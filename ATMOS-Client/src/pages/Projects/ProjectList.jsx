@@ -61,7 +61,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ProjectList = ({ projects, userInfo }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const { classes } = useStyles();
   const [user, setUser] = useState(userInfo);
@@ -75,12 +75,12 @@ const ProjectList = ({ projects, userInfo }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           updatedLastUsed: new Date(),
         }),
-      }
+      },
     );
     const data = await res.json();
   };
@@ -93,11 +93,24 @@ const ProjectList = ({ projects, userInfo }) => {
   };
 
   return (
-    <Paper p={20} sx={classes.projectContainer} bg={'#f8f9fa'}>
-      <Group sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Paper sx={classes.projectBox} withBorder bg={colorCodes[colorCodes.length - 1]} onClick={() => { navigate('/createproject') }}>
-          <Paper sx={classes.plus} h={110} w={130} bg={colorCodes[colorCodes.length - 1]} px={10}>
-            <IconPlus className={classes.iconPlus} color='white' />
+    <Paper p={20} sx={classes.projectContainer} bg={"#f8f9fa"}>
+      <Group sx={{ display: "flex", flexDirection: "column" }}>
+        <Paper
+          sx={classes.projectBox}
+          withBorder
+          bg={colorCodes[colorCodes.length - 1]}
+          onClick={() => {
+            navigate("/createproject");
+          }}
+        >
+          <Paper
+            sx={classes.plus}
+            h={110}
+            w={130}
+            bg={colorCodes[colorCodes.length - 1]}
+            px={10}
+          >
+            <IconPlus className={classes.iconPlus} color="white" />
           </Paper>
         </Paper>
         <Title order={4}>Add Project</Title>
@@ -107,20 +120,55 @@ const ProjectList = ({ projects, userInfo }) => {
         projects
           .map((project, index) => (
             <>
-              <Group sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Paper sx={classes.projectBox} onClick={() => { insideProject(project) }} key={index} bg={colorCodes[index]} withBorder>
-                  <Paper sx={classes.plus} h={110} w={130} bg={colorCodes[index]} px={10}>
-                    {index === 0 && <IconHexagonLetterA color='white' className={classes.iconPlus} />}
-                    {index === 1 && <IconChartBar color='white' className={classes.iconPlus} />}
-                    {index === 2 && <IconChartArcs3 color='white' className={classes.iconPlus} />}
-                    {index === 3 && <Icon3dCubeSphere color='white' className={classes.iconPlus} />}
-                    {index === 4 && <IconMenu2 color='white' className={classes.iconPlus} />}
+              <Group sx={{ display: "flex", flexDirection: "column" }}>
+                <Paper
+                  sx={classes.projectBox}
+                  onClick={() => {
+                    insideProject(project);
+                  }}
+                  key={index}
+                  bg={colorCodes[index]}
+                  withBorder
+                >
+                  <Paper
+                    sx={classes.plus}
+                    h={110}
+                    w={130}
+                    bg={colorCodes[index]}
+                    px={10}
+                  >
+                    {index === 0 && (
+                      <IconHexagonLetterA
+                        color="white"
+                        className={classes.iconPlus}
+                      />
+                    )}
+                    {index === 1 && (
+                      <IconChartBar
+                        color="white"
+                        className={classes.iconPlus}
+                      />
+                    )}
+                    {index === 2 && (
+                      <IconChartArcs3
+                        color="white"
+                        className={classes.iconPlus}
+                      />
+                    )}
+                    {index === 3 && (
+                      <Icon3dCubeSphere
+                        color="white"
+                        className={classes.iconPlus}
+                      />
+                    )}
+                    {index === 4 && (
+                      <IconMenu2 color="white" className={classes.iconPlus} />
+                    )}
                   </Paper>
                 </Paper>
                 <Title order={4}>{project.projectName}</Title>
               </Group>
             </>
-
           ))
           .reverse()}
     </Paper>

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const UserSingle = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState();
   const [projects, setProjects] = useState();
@@ -21,8 +21,7 @@ const UserSingle = () => {
       });
       const data = await res.json();
       setUser(data.user);
-        const pres = await fetch(`${backendUrl}/admin/projects`, {
-
+      const pres = await fetch(`${backendUrl}/admin/projects`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -31,7 +30,6 @@ const UserSingle = () => {
     }
     getUser();
   }, [user, projects]);
-
 
   return (
     <div className="single">

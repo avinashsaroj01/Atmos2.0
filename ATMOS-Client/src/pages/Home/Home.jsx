@@ -7,8 +7,7 @@ import Navbar_v2 from "../../UI/Navbar_v2";
 import { Center, Container, Flex } from "@mantine/core";
 
 const Home = () => {
-  const backendUrl =
-    process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState(null);
 

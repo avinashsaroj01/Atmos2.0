@@ -124,7 +124,7 @@ const ProjectInfoBar_v2 = ({
       {/* </Flex> */}
     </Tabs.Tab>
   ));
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -153,7 +153,7 @@ const ProjectInfoBar_v2 = ({
 
     if (isStarred) {
       const newFavProjectIdList = userInfo.favProjectIdList.filter(
-        (id) => id !== projectInfo._id
+        (id) => id !== projectInfo._id,
       );
 
       const response = await fetch(
@@ -167,7 +167,7 @@ const ProjectInfoBar_v2 = ({
           body: JSON.stringify({
             projectId: projectInfo._id,
           }),
-        }
+        },
       );
 
       const data = await response.json();

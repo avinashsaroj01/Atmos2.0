@@ -124,7 +124,7 @@ const dummyData = {
 };
 
 const Chat = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState(null);
   const [allProjects, setAllProjects] = useState([]);
@@ -176,7 +176,7 @@ const Chat = () => {
           ...newMessage,
           createdAt: new Date(),
         },
-        channelId
+        channelId,
       );
     }
     const addChat = async () => {
@@ -190,7 +190,7 @@ const Chat = () => {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({ newMessage }),
-          }
+          },
         );
         const data = await res.json();
         setChatBoxData(data);
@@ -206,16 +206,13 @@ const Chat = () => {
     if (!channel || !channel?.id) return;
     const getGroupChat = async () => {
       try {
-        const res = await fetch(
-          `${backendUrl}/message/${channel.id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await fetch(`${backendUrl}/message/${channel.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
         const data = await res.json();
         setChatBoxData(data);
@@ -230,16 +227,13 @@ const Chat = () => {
   useEffect(() => {
     async function getUser() {
       try {
-        const res = await fetch(
-          `${backendUrl}/user/getUserInfo`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await fetch(`${backendUrl}/user/getUserInfo`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
         const data = await res.json();
         if (data.success) {
@@ -255,16 +249,13 @@ const Chat = () => {
   useEffect(() => {
     const getAllProjects = async () => {
       try {
-        const res = await fetch(
-          `${backendUrl}/project/getUserProjects`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await fetch(`${backendUrl}/project/getUserProjects`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         const data = await res.json();
         setAllProjects(data.projects);
       } catch (e) {
@@ -277,16 +268,13 @@ const Chat = () => {
   useEffect(() => {
     const getAllDMs = async () => {
       try {
-        const res = await fetch(
-          `${backendUrl}/message/getAllDMs`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await fetch(`${backendUrl}/message/getAllDMs`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         const data = await res.json();
         setAllDMs(data);
       } catch (e) {

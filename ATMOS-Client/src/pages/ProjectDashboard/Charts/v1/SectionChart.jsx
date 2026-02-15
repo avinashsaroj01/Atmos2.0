@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./SectionChart.mdoulde.css";
 
 const SectionChart = ({ statsData, userInfo, projectInfo }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [sectionInfo, setSectionInfo] = useState([]);
 
@@ -16,7 +16,7 @@ const SectionChart = ({ statsData, userInfo, projectInfo }) => {
       for (let i = 0; i < sec.length; i++) {
         for (let j = 0; j < sec[i].taskIDList.length; j++) {
           sec[i].taskIDList[j] = task.find(
-            (element) => element.id === sec[i].taskIDList[j]
+            (element) => element.id === sec[i].taskIDList[j],
           );
         }
       }
@@ -29,9 +29,7 @@ const SectionChart = ({ statsData, userInfo, projectInfo }) => {
   //fetch request to get sectionList (At the moment this gets all the sections, In node it has to implemented in such a way that only sections of this specific section are send)
 
   useEffect(() => {
-    fetch(
-      `${backendUrl}/sectionList?projectId_like=${projectInfo.id}`
-    )
+    fetch(`${backendUrl}/sectionList?projectId_like=${projectInfo.id}`)
       .then((res) => {
         // console.log("sectionList fetched", res);
         if (!res.ok) {
@@ -41,9 +39,7 @@ const SectionChart = ({ statsData, userInfo, projectInfo }) => {
       })
       .then(async (sec) => {
         // console.log(sec);
-        const task = await fetch(
-          `${backendUrl}/taskList`
-        ).then((res) => {
+        const task = await fetch(`${backendUrl}/taskList`).then((res) => {
           // console.log(res);
           if (!res.ok) {
             throw Error("Not able to fetch the TaskList");

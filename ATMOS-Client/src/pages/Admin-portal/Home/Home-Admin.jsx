@@ -11,7 +11,7 @@ import Chart from "../Components/Chart/Chart";
 // import Table from "../../components/table/Table";
 
 const HomeAdmin = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState();
   const [projects, setProjects] = useState([]);
@@ -28,24 +28,19 @@ const HomeAdmin = () => {
       });
       const userData2 = await userRes2.json();
       setUser(userData2.user);
-        const res = await fetch(`${backendUrl}/admin/projects`, {
-
-
+      const res = await fetch(`${backendUrl}/admin/projects`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-        const userRes = await fetch(`${backendUrl}/admin/users`, {
-
+      const userRes = await fetch(`${backendUrl}/admin/users`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-        const taskRes = await fetch(`${backendUrl}/admin/tasks`, {
-
+      const taskRes = await fetch(`${backendUrl}/admin/tasks`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-        const sectionRes = await fetch(`${backendUrl}/admin/sections`, {
-
+      const sectionRes = await fetch(`${backendUrl}/admin/sections`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -64,20 +59,22 @@ const HomeAdmin = () => {
     <div className="home">
       {/* <Sidebar /> */}
       <div className="homeContainer">
-
         {user && <Navbar activeLink={"/admin-portal/"} user={user} />}
         {/* <Navbar2 /> */}
-        {user && <div className="widgets">
-          <Widget type="users" len={users} />
-          <Widget type="projects" len={projects} />
-          <Widget type="sections" len={sections} />
-          <Widget type="tasks" len={tasks} />
-
-        </div>}
-        {user && <div className="charts">
-          <Featured />
-          <Chart title="Last 6 Months (Users)" aspect={2 / 1} />
-        </div>}
+        {user && (
+          <div className="widgets">
+            <Widget type="users" len={users} />
+            <Widget type="projects" len={projects} />
+            <Widget type="sections" len={sections} />
+            <Widget type="tasks" len={tasks} />
+          </div>
+        )}
+        {user && (
+          <div className="charts">
+            <Featured />
+            <Chart title="Last 6 Months (Users)" aspect={2 / 1} />
+          </div>
+        )}
         {/* <div className="listContainer">
           <div className="listTitle">Latest Transactions</div>
           <Table />

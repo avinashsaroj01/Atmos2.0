@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 
 const UserList = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState();
   const [users, setUsers] = useState();
@@ -19,8 +19,7 @@ const UserList = () => {
       });
       const data = await res.json();
       setUser(data.user);
-        const pres = await fetch(`${backendUrl}/admin/users`, {
-
+      const pres = await fetch(`${backendUrl}/admin/users`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -38,7 +37,7 @@ const UserList = () => {
         {users && <Datatable alldata={users} type="users" />}
       </div>
     </div>
-  )
+  );
 }
 
 export default UserList

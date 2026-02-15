@@ -53,11 +53,11 @@ const useStyles = createStyles((theme) => ({
 
 
 const RecentProject = ({ user }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const { classes } = useStyles();
   const [projects, setProjects] = useState([]);
-  const [value, setValue] = useState('Recent');
+  const [value, setValue] = useState("Recent");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const RecentProject = ({ user }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await res.json();
@@ -86,12 +86,12 @@ const RecentProject = ({ user }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          updatedLastUsed: new Date()
-        })
-      }
+          updatedLastUsed: new Date(),
+        }),
+      },
     );
     const data = await res.json();
   };
@@ -99,17 +99,28 @@ const RecentProject = ({ user }) => {
   return (
     <>
       <Paper sx={classes.projectContainer} withBorder>
-        <Container fluid={true} m={0} p={0} mb={10} sx={classes.projectHeadContainer}>
-          <Flex w={'100%'} pt={20} align={'center'} gap={10}>
-            <Title order={2} color={"#05386b"} pl={10}>Projects</Title>
+        <Container
+          fluid={true}
+          m={0}
+          p={0}
+          mb={10}
+          sx={classes.projectHeadContainer}
+        >
+          <Flex w={"100%"} pt={20} align={"center"} gap={10}>
+            <Title order={2} color={"#05386b"} pl={10}>
+              Projects
+            </Title>
             <Select
               onChange={setValue}
               value={value}
-              data={[{ value: "Recent", label: "Recent" }, { value: "Favorite", label: "Favorite" }]}
+              data={[
+                { value: "Recent", label: "Recent" },
+                { value: "Favorite", label: "Favorite" },
+              ]}
               size="small"
               rightSection={<IconChevronDown size="1rem" />}
               w={100}
-              styles={{ rightSection: { pointerEvents: 'none' } }}
+              styles={{ rightSection: { pointerEvents: "none" } }}
               variant="filled"
               color={"#05386b"}
             />
@@ -117,22 +128,50 @@ const RecentProject = ({ user }) => {
         </Container>
 
         {
-          <Container fluid={true} m={0} p={0} sx={classes.projectContentContainer}>
-            {!isLoading && value === "Recent" && projects.length > 0 && <RecentProjectContent userId={user._id} projectList={projects} />}
-            {!isLoading && value === "Favorite" && user && <FavoriteProjectContent userId={user._id} favProjectList={user.favProjectIdList} />}
-            {
-              !isLoading && value == "Recent" && projects.length === 0 &&
-              <Flex w={'100%'} h={'100%'} align={'center'} justify={'center'} direction={'column'}>
-                <Image maw={120} mx="auto" radius="md" src="./images/project-management.png" alt="No project" />
+          <Container
+            fluid={true}
+            m={0}
+            p={0}
+            sx={classes.projectContentContainer}
+          >
+            {!isLoading && value === "Recent" && projects.length > 0 && (
+              <RecentProjectContent userId={user._id} projectList={projects} />
+            )}
+            {!isLoading && value === "Favorite" && user && (
+              <FavoriteProjectContent
+                userId={user._id}
+                favProjectList={user.favProjectIdList}
+              />
+            )}
+            {!isLoading && value == "Recent" && projects.length === 0 && (
+              <Flex
+                w={"100%"}
+                h={"100%"}
+                align={"center"}
+                justify={"center"}
+                direction={"column"}
+              >
+                <Image
+                  maw={120}
+                  mx="auto"
+                  radius="md"
+                  src="./images/project-management.png"
+                  alt="No project"
+                />
                 <Text>No Projects</Text>
               </Flex>
-            }
-            {
-              isLoading &&
-              <Flex w={'100%'} h={'100%'} align={'center'} justify={'center'} direction={'column'}>
+            )}
+            {isLoading && (
+              <Flex
+                w={"100%"}
+                h={"100%"}
+                align={"center"}
+                justify={"center"}
+                direction={"column"}
+              >
                 <Loader size="lg" />
               </Flex>
-            }
+            )}
           </Container>
         }
       </Paper>

@@ -62,198 +62,214 @@ const useStyles = createStyles((theme) => ({
 
 
 const SectionCard = ({ projectInfo, section: sectionInfo, taskList, createTask, expandModal, rerender, setRerender, sectionIndex, userAccessLevel, handleProvided }) => {
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-    // console.log(sectionInfo, 'sectionInfo');
-    console.log(taskList, 'taskList');
+  // console.log(sectionInfo, 'sectionInfo');
+  console.log(taskList, "taskList");
 
-    const { classes } = useStyles();
-    const { hovered, ref } = useHover();
-    let count = 0;
+  const { classes } = useStyles();
+  const { hovered, ref } = useHover();
+  let count = 0;
 
-    const taskOrder = [];
-    const [state, handlers] = useListState([]);
-    useEffect(() => {
-        // console.log(taskList, 'taskList from sectionCard');
-        for (let i = 0; i < taskList.length; i++) {
-            taskOrder.push(i);
-        }
-        handlers.setState(taskOrder);
-    }, [rerender]);
-
-    // console.log(state, 'state from section Card');
-
-
-    const [sectionName, setSectionName] = useState(sectionInfo.sectionName);
-    const [isSectionOptionClicked, setIsSectionOptionClicked] = useState(false);
-
-    const saveSectionName = async (event) => {
-        const sectionID = sectionInfo._id;
-        const response = await fetch(`${backendUrl}/section/renameSection/${sectionID}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-            body: JSON.stringify({ sectionName: event.nativeEvent.target.value })
-        })
-        const data = await response.json();
-        console.log(data, 'Section Name Updated');
-        setSectionName(event.nativeEvent.target.value);
-        setRerender(!rerender);
+  const taskOrder = [];
+  const [state, handlers] = useListState([]);
+  useEffect(() => {
+    // console.log(taskList, 'taskList from sectionCard');
+    for (let i = 0; i < taskList.length; i++) {
+      taskOrder.push(i);
     }
-    const handleSectionOptionClicked = (event) => {
-        event.stopPropagation();
-        setIsSectionOptionClicked(true);
-    }
+    handlers.setState(taskOrder);
+  }, [rerender]);
 
-    const deleteSection = async (event) => {
-        event.stopPropagation();
+  // console.log(state, 'state from section Card');
 
-        const sectionID = sectionInfo._id;
-        const response = await fetch(`${backendUrl}/section/deleteSection/${sectionID}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        })
-        const data = await response.json();
-        console.log(data, 'Section Deleted');
-        setRerender(!rerender);
-        setIsSectionOptionClicked(false);
-    }
+  const [sectionName, setSectionName] = useState(sectionInfo.sectionName);
+  const [isSectionOptionClicked, setIsSectionOptionClicked] = useState(false);
 
-    const handleClickOutside = (event) => {
-        event.stopPropagation();
-        setIsSectionOptionClicked(false);
-    }
+  const saveSectionName = async (event) => {
+    const sectionID = sectionInfo._id;
+    const response = await fetch(
+      `${backendUrl}/section/renameSection/${sectionID}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ sectionName: event.nativeEvent.target.value }),
+      },
+    );
+    const data = await response.json();
+    console.log(data, "Section Name Updated");
+    setSectionName(event.nativeEvent.target.value);
+    setRerender(!rerender);
+  };
+  const handleSectionOptionClicked = (event) => {
+    event.stopPropagation();
+    setIsSectionOptionClicked(true);
+  };
 
-    const items = sectionInfo.taskIdList.length > 0 && state.length > 0 && state.map((taskIndex, index) => (
-        <Draggable key={taskIndex} index={sectionIndex} draggableId={'' + taskIndex}>
-            {(provided) => (
-                <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                    key={index}
-                >
-                    {console.log(state, 'state')}
-                    {console.log(taskIndex, sectionIndex, 'taskIndex', 'sectionIndex')}
-                    {console.log(sectionInfo.sectionName, 'sectionInfo.SectionName')}
-                    {console.log(sectionInfo.taskIdList, 'sectionTaskIDList')}
-                    <TaskCard
-                        task={taskList[taskIndex]}
-                        section={sectionInfo}
-                        expandModal={expandModal}
-                        rerender={rerender}
-                        setRerender={setRerender}
-                        userAccessLevel={userAccessLevel}
-                    />
-                </div>
-            )}
-        </Draggable>
+  const deleteSection = async (event) => {
+    event.stopPropagation();
+
+    const sectionID = sectionInfo._id;
+    const response = await fetch(
+      `${backendUrl}/section/deleteSection/${sectionID}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+    const data = await response.json();
+    console.log(data, "Section Deleted");
+    setRerender(!rerender);
+    setIsSectionOptionClicked(false);
+  };
+
+  const handleClickOutside = (event) => {
+    event.stopPropagation();
+    setIsSectionOptionClicked(false);
+  };
+
+  const items =
+    sectionInfo.taskIdList.length > 0 &&
+    state.length > 0 &&
+    state.map((taskIndex, index) => (
+      <Draggable
+        key={taskIndex}
+        index={sectionIndex}
+        draggableId={"" + taskIndex}
+      >
+        {(provided) => (
+          <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            key={index}
+          >
+            {console.log(state, "state")}
+            {console.log(taskIndex, sectionIndex, "taskIndex", "sectionIndex")}
+            {console.log(sectionInfo.sectionName, "sectionInfo.SectionName")}
+            {console.log(sectionInfo.taskIdList, "sectionTaskIDList")}
+            <TaskCard
+              task={taskList[taskIndex]}
+              section={sectionInfo}
+              expandModal={expandModal}
+              rerender={rerender}
+              setRerender={setRerender}
+              userAccessLevel={userAccessLevel}
+            />
+          </div>
+        )}
+      </Draggable>
     ));
 
-    return (
-        <>
-            <DragDropContext
-                onDragEnd={({ destination, source }) =>
-                    handlers.reorder({ from: source.index, to: destination?.index || 0 })
-                }
+  return (
+    <>
+      <DragDropContext
+        onDragEnd={({ destination, source }) =>
+          handlers.reorder({ from: source.index, to: destination?.index || 0 })
+        }
+      >
+        <Card mr={"20px"} sx={classes.card} ref={ref} bg={"#ebeff3"}>
+          <div>
+            <Group
+              sx={classes.cardTopContainer}
+              m={0}
+              p={0}
+              pr={5}
+              position="apart"
             >
+              <Input
+                placeholder="Section Name"
+                mr={"sm"}
+                sx={{
+                  Input: classes.sectionTitleInput,
+                }}
+                style={{
+                  width: "80%",
+                }}
+                value={sectionName}
+                onChange={(e) => {
+                  setSectionName(e.target.value);
+                }}
+                onBlur={saveSectionName}
+              />
+              {(userAccessLevel === "owner" || userAccessLevel === "high") &&
+                hovered && (
+                  <Menu
+                    transitionProps={{ transition: "pop" }}
+                    offset={2}
+                    arrowPosition="center"
+                    withArrow
+                    position="bottom"
+                    menuPosition="right"
+                    zIndex={100}
+                  >
+                    <Menu.Target>
+                      <ActionIcon>
+                        <IconDots size="1rem" stroke={1.5} />
+                      </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown zindex={100}>
+                      <Menu.Item
+                        icon={<IconTrash size="1rem" stroke={1.5} />}
+                        color="red"
+                        onClick={(e) => deleteSection(e)}
+                        zindex={100}
+                      >
+                        Delete Section
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                )}
+            </Group>
+          </div>
 
+          <Container m={0} p={0} mt={"20px"} pb={20}>
+            <Droppable
+              droppableId={sectionInfo._id}
+              // mode="virtual"
+              // renderClone={(provided, snapshot, rubric) => {
+              //     const { source } = rubric;
+              //     console.log(source, 'source');
+              //     const task = taskList[source.index];
+              //     console.log(task, 'task');
+              //     return (
+              //         <TaskCard
+              //             key={task._id}
+              //             task={task}
+              //             section={sectionInfo}
+              //             expandModal={expandModal}
+              //             rerender={rerender}
+              //             setRerender={setRerender}
+              //         />
+              //     );
+              // }
+              // }
+            >
+              {(provided, snapshot) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {items}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            {(userAccessLevel === "owner" ||
+              userAccessLevel === "high" ||
+              userAccessLevel === "medium") && (
+              <Button fullWidth onClick={() => createTask(sectionInfo)}>
+                Add Task
+              </Button>
+            )}
+          </Container>
+        </Card>
+      </DragDropContext>
 
-                <Card mr={'20px'} sx={classes.card} ref={ref} bg={'#ebeff3'}>
-                    <div>
-                        <Group sx={classes.cardTopContainer} m={0} p={0} pr={5} position='apart'  >
-                            <Input placeholder="Section Name"
-                                mr={'sm'}
-                                sx={{
-                                    Input: classes.sectionTitleInput,
-                                }}
-                                style={{
-                                    width: '80%'
-                                }}
-                                value={sectionName}
-                                onChange={e => { setSectionName(e.target.value) }}
-                                onBlur={saveSectionName}
-                            />
-                            {
-                                (userAccessLevel === 'owner' || userAccessLevel === 'high') && hovered && (
-                                    <Menu
-                                        transitionProps={{ transition: 'pop' }}
-                                        offset={2}
-                                        arrowPosition="center"
-                                        withArrow
-                                        position="bottom"
-                                        menuPosition="right"
-                                        zIndex={100}
-                                    >
-                                        <Menu.Target>
-                                            <ActionIcon>
-                                                <IconDots size="1rem" stroke={1.5} />
-                                            </ActionIcon>
-                                        </Menu.Target>
-                                        <Menu.Dropdown
-                                            zindex={100}
-                                        >
-                                            <Menu.Item
-                                                icon={<IconTrash size="1rem" stroke={1.5} />}
-                                                color="red"
-                                                onClick={(e) => deleteSection(e)}
-                                                zindex={100}
-                                            >
-                                                Delete Section
-                                            </Menu.Item>
-                                        </Menu.Dropdown>
-                                    </Menu>
-                                )
-                            }
-
-                        </Group>
-                    </div>
-
-                    <Container m={0} p={0} mt={'20px'} pb={20} >
-                        <Droppable
-                            droppableId={sectionInfo._id}
-                        // mode="virtual"
-                        // renderClone={(provided, snapshot, rubric) => {
-                        //     const { source } = rubric;
-                        //     console.log(source, 'source');
-                        //     const task = taskList[source.index];
-                        //     console.log(task, 'task');
-                        //     return (
-                        //         <TaskCard
-                        //             key={task._id}
-                        //             task={task}
-                        //             section={sectionInfo}
-                        //             expandModal={expandModal}
-                        //             rerender={rerender}
-                        //             setRerender={setRerender}
-                        //         />
-                        //     );
-                        // }
-                        // }
-
-                        >
-                            {(provided, snapshot) => (
-                                <div {...provided.droppableProps} ref={provided.innerRef}>
-                                    {items}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                        {
-                            (userAccessLevel === 'owner' || userAccessLevel === 'high' || userAccessLevel === 'medium') && (
-                                <Button fullWidth onClick={() => createTask(sectionInfo)} >
-                                    Add Task
-                                </Button>
-                            )
-                        }
-
-                    </Container>
-
-
-                </Card>
-            </DragDropContext>
-
-
-            {/* <div className={isSectionOptionClicked ? "show-section-option" : "hide-section-option"} onClick={handleClickOutside}></div>
+      {/* <div className={isSectionOptionClicked ? "show-section-option" : "hide-section-option"} onClick={handleClickOutside}></div>
             <div className="section section-0">
             <div className="section-head">
             <input
@@ -296,10 +312,8 @@ const SectionCard = ({ projectInfo, section: sectionInfo, taskList, createTask, 
                     <div className='add-task-div' onClick={() => { createTask(sectionInfo) }} ><img className="add-task-img-2" src="https://img.icons8.com/sf-regular/48/000000/add.png" /><p className="paraChanges">Add Task</p></div>
                 </div>
             </div> */}
-        </>
-
-
-    );
+    </>
+  );
 }
 
 export default SectionCard;

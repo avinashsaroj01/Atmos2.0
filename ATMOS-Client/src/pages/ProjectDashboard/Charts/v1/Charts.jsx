@@ -25,7 +25,7 @@ ChartJS.register(
 );
 
 const Charts = ({ projectID, projectInfo, setProjectInfo, userInfoOfUser }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState(userInfoOfUser);
   console.log(user, "from charts");
@@ -53,9 +53,7 @@ const Charts = ({ projectID, projectInfo, setProjectInfo, userInfoOfUser }) => {
   // console.log(projectInfo);
 
   async function getTaskInfo(taskId) {
-    const res = await fetch(
-      `${backendUrl}/taskList/${taskId}`
-    );
+    const res = await fetch(`${backendUrl}/taskList/${taskId}`);
     const data = await res.json();
     return data;
   }
@@ -64,7 +62,7 @@ const Charts = ({ projectID, projectInfo, setProjectInfo, userInfoOfUser }) => {
     const userData = await JSON.parse(JSON.stringify(user));
     for (let i = 0; i < userData.taskAssignedIDList.length; i++) {
       userData.taskAssignedIDList[i] = await getTaskInfo(
-        user.taskAssignedIDList[i]
+        user.taskAssignedIDList[i],
       );
     }
     return userData;
@@ -243,7 +241,7 @@ const Charts = ({ projectID, projectInfo, setProjectInfo, userInfoOfUser }) => {
       const userData = await JSON.parse(JSON.stringify(user));
       for (let i = 0; i < userData.taskAssignedIDList.length; i++) {
         userData.taskAssignedIDList[i] = await getTaskInfo(
-          user.taskAssignedIDList[i]
+          user.taskAssignedIDList[i],
         );
       }
       // return userData;

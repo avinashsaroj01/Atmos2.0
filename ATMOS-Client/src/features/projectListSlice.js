@@ -16,7 +16,8 @@ export const selectProjectById = (state, projectId) => {
 //     dispatch(setProject(project));
 // }
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+const backendUrl =
+  process.env.REACT_APP_BACKEND_URL ;
 export const projectListSlice = createSlice({
 
   name: "projectList",

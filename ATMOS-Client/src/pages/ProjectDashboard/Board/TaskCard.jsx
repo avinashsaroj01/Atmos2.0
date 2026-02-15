@@ -37,129 +37,149 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const TaskCard = ({ task, section, expandModal, rerender, setRerender, userAccessLevel }) => {
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
+  const { classes } = useStyles();
+  const { hovered, ref } = useHover();
 
-    const { classes } = useStyles();
-    const { hovered, ref } = useHover();
+  console.log(task, "task");
+  const dateFormater = (date) => {
+    let newDate = new Date(date);
+    const offset = newDate.getTimezoneOffset();
+    newDate = new Date(newDate.getTime() - offset * 60 * 1000);
+    return newDate.toISOString().split("T")[0];
+  };
 
-    console.log(task, 'task');
-    const dateFormater = (date) => {
-        let newDate = new Date(date);
-        const offset = newDate.getTimezoneOffset()
-        newDate = new Date(newDate.getTime() - (offset * 60 * 1000))
-        return newDate.toISOString().split('T')[0]
+  const deleteTask = async (event, taskID) => {
+    event.stopPropagation();
+
+    const res = await fetch(`${backendUrl}/task/deleteTask/${taskID}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    console.log("deleted task", taskID);
+    setRerender(!rerender);
+  };
+
+  const colorPickerPriority = (priority) => {
+    switch (priority) {
+      case "High":
+        return "orange";
+      case "Medium":
+        return "yellow";
+      case "Low":
+        return "lime";
+      default:
+        return "gray";
     }
+  };
 
-    const deleteTask = async (event, taskID) => {
-        event.stopPropagation();
-
-        const res = await fetch(`${backendUrl}/task/deleteTask/${taskID}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        console.log("deleted task", taskID);
-        setRerender(!rerender);
-
+  const colorPickerStatus = (status) => {
+    switch (status) {
+      case "In Progress":
+        return "teal";
+      case "Stuck":
+        return "pink";
+      case "Backlog":
+        return "red";
+      default:
+        return "gray";
     }
+  };
 
-    const colorPickerPriority = (priority) => {
-        switch (priority) {
-            case 'High':
-                return 'orange';
-            case 'Medium':
-                return 'yellow';
-            case 'Low':
-                return 'lime';
-            default:
-                return 'gray';
-        }
-    }
+  const openTaskModal = (e) => {
+    e.stopPropagation();
+    expandModal(task, section);
+  };
 
-    const colorPickerStatus = (status) => {
-        switch (status) {
-            case "In Progress":
-                return 'teal';
-            case 'Stuck':
-                return 'pink';
-            case 'Backlog':
-                return 'red';
-            default:
-                return 'gray';
-        }
-    }
+  return (
+    <>
+      <Paper
+        withBorder
+        radius="md"
+        sx={classes.taskBody}
+        ref={ref}
+        onClick={(e) => openTaskModal(e)}
+      >
+        <Group position="apart" mb={5} h={"30px"}>
+          <Text truncate sx={classes.taskName}>
+            {task.taskName}
+          </Text>
+          {(userAccessLevel === "owner" ||
+            userAccessLevel === "high" ||
+            userAccessLevel === "medium") &&
+            hovered && (
+              <Menu
+                transitionProps={{ transition: "pop" }}
+                offset={2}
+                arrowPosition="center"
+                withArrow
+                position="bottom"
+                menuPosition="right"
+                zIndex={100}
+                trigger="click"
 
-    const openTaskModal = (e) => {
-        e.stopPropagation();
-        expandModal(task, section);
-    }
+                // onClick={(e) => e.stopPropagation()}
+              >
+                <Menu.Target>
+                  <ActionIcon zIndex={100} onClick={(e) => e.stopPropagation()}>
+                    <IconDots size="1rem" stroke={1.5} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown
+                  onClick={(e) => e.stopPropagation()}
+                  zIndex={100}
+                >
+                  <Menu.Item
+                    icon={<IconTrash size="1rem" stroke={1.5} z={5} />}
+                    color="red"
+                    onClick={(event) => {
+                      deleteTask(event, task._id);
+                    }}
+                  >
+                    Delete Task
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            )}
+        </Group>
+        {(task.taskPriority !== "Choose Priority" ||
+          task.taskStatus !== "Choose Status") && (
+          <Group>
+            {task.taskPriority && task.taskPriority !== "Choose Priority" && (
+              <Badge
+                color={colorPickerPriority(task.taskPriority)}
+                radius="md"
+                variant="light"
+              >
+                {task.taskPriority}
+              </Badge>
+            )}
+            {task.taskStatus && task.taskStatus !== "Choose Status" && (
+              <Badge
+                color={colorPickerStatus(task.taskStatus)}
+                radius="md"
+                variant="light"
+              >
+                {task.taskStatus}
+              </Badge>
+            )}
+          </Group>
+        )}
+        {task.taskDeadline &&
+          dateFormater(task.taskDeadline) != "1970-01-01" && (
+            <Group position="apart" mt={5}>
+              <Text ta="left" fz="sm" c="dimmed">
+                {dateFormater(task.taskDeadline)}
+              </Text>
+            </Group>
+          )}
+      </Paper>
 
-
-    return (
-        <>
-            <Paper withBorder radius="md" sx={classes.taskBody} ref={ref} onClick={(e) => openTaskModal(e)} >
-                <Group position="apart" mb={5} h={'30px'} >
-                    <Text
-                        truncate
-                        sx={classes.taskName}
-                    >{task.taskName}</Text>
-                    {(userAccessLevel === 'owner' || userAccessLevel === 'high' || userAccessLevel === 'medium') && hovered &&
-                        <Menu
-                            transitionProps={{ transition: 'pop' }}
-                            offset={2}
-                            arrowPosition="center"
-                            withArrow
-                            position="bottom"
-                            menuPosition="right"
-                            zIndex={100}
-                            trigger="click"
-
-                        // onClick={(e) => e.stopPropagation()}
-                        >
-                            <Menu.Target >
-                                <ActionIcon
-                                    zIndex={100}
-                                    onClick={(e) => e.stopPropagation()}
-
-                                >
-                                    <IconDots size="1rem" stroke={1.5} />
-                                </ActionIcon>
-                            </Menu.Target>
-                            <Menu.Dropdown
-                                onClick={(e) => e.stopPropagation()}
-                                zIndex={100}
-                            >
-                                <Menu.Item
-                                    icon={<IconTrash size="1rem" stroke={1.5} z={5} />}
-                                    color="red"
-                                    onClick={event => { deleteTask(event, task._id) }}
-                                >
-                                    Delete Task
-                                </Menu.Item>
-                            </Menu.Dropdown>
-                        </Menu>
-                    }
-                </Group>
-                {
-                    ((task.taskPriority !== "Choose Priority") || (task.taskStatus !== "Choose Status")) &&
-                    <Group>
-                        {task.taskPriority && (task.taskPriority !== "Choose Priority") && <Badge color={colorPickerPriority(task.taskPriority)} radius="md" variant="light">{task.taskPriority}</Badge>}
-                        {task.taskStatus && (task.taskStatus !== "Choose Status") && <Badge color={colorPickerStatus(task.taskStatus)} radius="md" variant="light">{task.taskStatus}</Badge>}
-                    </Group>
-                }
-                {task.taskDeadline && dateFormater(task.taskDeadline) != '1970-01-01' &&
-                    <Group position="apart" mt={5}>
-                        <Text ta="left" fz="sm" c="dimmed">
-                            {dateFormater(task.taskDeadline)}
-                        </Text>
-                    </Group>
-                }
-
-
-
-            </Paper>
-
-            {/* <div className="task task-0"
+      {/* <div className="task task-0"
                 variant="primary"
                 onClick={() => expandModal(task, section)}
                 key={task.id}>
@@ -180,8 +200,8 @@ const TaskCard = ({ task, section, expandModal, rerender, setRerender, userAcces
                     </div>
                 </div>
             </div> */}
-        </>
-    );
+    </>
+  );
 }
 
 export default TaskCard;

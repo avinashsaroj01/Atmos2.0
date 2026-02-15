@@ -7,8 +7,7 @@ import Navbar_v2 from "../../UI/Navbar_v2";
 import styles from "./CreateProject.module.css";
 
 const CreateProject = () => {
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const history = useNavigate();
   // const dispatch = useDispatch();
@@ -17,12 +16,11 @@ const CreateProject = () => {
   useEffect(() => {
     // console.log('use effect from home');
     const getUser = async () => {
-        const res = await fetch(`${backendUrl}/user/getUserInfo`, {
-
+      const res = await fetch(`${backendUrl}/user/getUserInfo`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -31,8 +29,7 @@ const CreateProject = () => {
         // console.log(data.user, 'from home');
         setUser(data.user);
       }
-
-    }
+    };
     getUser();
   }, []);
 
@@ -51,7 +48,7 @@ const CreateProject = () => {
 
   function backToHome() {
     setnextPage(1);
-    history("/projects", {replace: true});
+    history("/projects", { replace: true });
   }
 
   const handleSubmit = async (e) => {
@@ -66,16 +63,15 @@ const CreateProject = () => {
       projectOwner: user._id,
     };
 
-    console.log(project, 'project from create project');
+    console.log(project, "project from create project");
 
     setIsPending(true);
 
-      const newProjectInfo = await fetch(`${backendUrl}/project/create`, {
-
+    const newProjectInfo = await fetch(`${backendUrl}/project/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(project),
     });
@@ -85,7 +81,7 @@ const CreateProject = () => {
 
     setIsPending(false);
     setnextPage(1);
-    history("/projects", {replace: true});
+    history("/projects", { replace: true });
   };
 
   const checkProjectName = () => {
@@ -101,7 +97,7 @@ const CreateProject = () => {
   return (
     <>
       {/* <Navbar /> */}
-      {user && <Navbar_v2 activeLink={'/projects'} user={user} />}
+      {user && <Navbar_v2 activeLink={"/projects"} user={user} />}
       <div className={styles.createProject}>
         <div className={styles.projectLeftPart}>
           <div className={styles.leftFix}>
@@ -137,16 +133,24 @@ const CreateProject = () => {
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                   >
-                    <option value="Personal" data-testid="type-1">Personal</option>
-                    <option value="Education" data-testid="type-2">Education</option>
-                    <option value="Business" data-testid="type-3">Business</option>
+                    <option value="Personal" data-testid="type-1">
+                      Personal
+                    </option>
+                    <option value="Education" data-testid="type-2">
+                      Education
+                    </option>
+                    <option value="Business" data-testid="type-3">
+                      Business
+                    </option>
                   </select>
                 </form>
               )}
 
               {nextPage === 2 && (
                 <form onSubmit={handleSubmit}>
-                  <label data-testid={`label-${nextPage}`}>Project Statement</label>
+                  <label data-testid={`label-${nextPage}`}>
+                    Project Statement
+                  </label>
                   <textarea
                     className={styles.textareaInput}
                     placeholder="Write about the purpose of the project."
@@ -159,7 +163,9 @@ const CreateProject = () => {
 
               {nextPage === 3 && (
                 <form onSubmit={handleSubmit}>
-                  <label data-testid={`label-${nextPage}`}>Project Mission</label>
+                  <label data-testid={`label-${nextPage}`}>
+                    Project Mission
+                  </label>
                   <textarea
                     placeholder="Write about the mission of the project."
                     className={styles.textareaInput}
@@ -172,7 +178,9 @@ const CreateProject = () => {
 
               {nextPage === 4 && (
                 <form>
-                  <label data-testid={`label-${nextPage}`}>Project Description</label>
+                  <label data-testid={`label-${nextPage}`}>
+                    Project Description
+                  </label>
                   <textarea
                     placeholder=" Give the Description about the project."
                     className={styles.textareaInput}
@@ -185,7 +193,9 @@ const CreateProject = () => {
 
               {nextPage === 5 && (
                 <form>
-                  <label data-testid={`label-${nextPage}`}>Project Guidlines</label>
+                  <label data-testid={`label-${nextPage}`}>
+                    Project Guidlines
+                  </label>
                   <textarea
                     placeholder=" Write about the guidelines of the project."
                     className={styles.textareaInput}

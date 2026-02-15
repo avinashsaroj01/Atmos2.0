@@ -2,7 +2,7 @@ import styles from "./CompletedTask.module.css";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const CompletedTask = ({ user }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [tasksList, setTasksList] = useState();
 
@@ -15,8 +15,7 @@ const CompletedTask = ({ user }) => {
 
   useEffect(() => {
     const getTaskLists = async () => {
-        const res = await fetch(`${backendUrl}/task/getTaskList`, {
-
+      const res = await fetch(`${backendUrl}/task/getTaskList`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +76,7 @@ const CompletedTask = ({ user }) => {
                       </h6> */}
                   </Link>
                 </div>
-              )
+              ),
           )}
         {showImg && (
           <div className={styles.mainTask}>

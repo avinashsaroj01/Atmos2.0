@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 
 const TaskList = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [user, setUser] = useState();
   const [tasks, setTasks] = useState();
@@ -36,7 +36,7 @@ const TaskList = () => {
         {tasks && <Datatable alldata={tasks} type="tasks" />}
       </div>
     </div>
-  )
+  );
 }
 
 export default TaskList
