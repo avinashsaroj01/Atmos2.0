@@ -1,39 +1,50 @@
-require("dotenv").config(); // Ensure environment variables are loaded
-
+require("dotenv").config();
 const { createClient } = require("redis");
 
+let client;
 
-const client = createClient({
-  socket: {
-    host: "127.0.0.1",
-    port: 6379,
-    connectTimeout: 10000, // Increase timeout to 10 seconds
+// If REDIS_URL exists → production (Render)
+if (process.env.REDIS_URL) {
+  console.log("Using Render Redis");
 
-  },
-  password: process.env.REDIS_PASSWORD, // Ensure the password is set if Redis is secured
+  client = createClient({
+    url: process.env.REDIS_URL,
+    socket: {
+      connectTimeout: 10000,
+    },
+  });
+} else {
+  // Local Docker Redis
+  console.log("Using Local Redis");
 
-});
-
+  client = createClient({
+    socket: {
+      host: "127.0.0.1",
+      port: 6379,
+      connectTimeout: 10000,
+    },
+    password: process.env.REDIS_PASSWORD || undefined,
+  });
+}
 
 client.on("error", (err) => {
-  console.error("Redis Client Error:", err.message);
-  if (err.code === "ECONNREFUSED") {
-    console.error("Connection refused. Is Redis running?");
-  }
+  console.error("Redis Error:", err.message);
 });
 
-const clientConnect = async () => {
+client.on("connect", () => {
+  console.log("Redis Connected");
+});
+
+async function connectRedis() {
   try {
     if (!client.isOpen) {
-      console.log("Connecting to Redis...");
       await client.connect();
-      console.log("Redis connected successfully!");
     }
   } catch (err) {
-    console.error("Failed to connect to Redis:", err.message);
+    console.error("Redis Connection Failed:", err.message);
   }
-};
+}
 
-clientConnect();
+connectRedis();
 
 module.exports = client;
