@@ -68,9 +68,7 @@ const App = () => {
               exact
               path="/"
               element={
-                <RequireAuth allowedRoles={["user"]}>
                   <HomePage />
-                </RequireAuth>
               }
             />
             <Route
