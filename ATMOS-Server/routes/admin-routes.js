@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const auth = require("../middlewares/auth");
+const admin = require("../middlewares/admin");
 
 // User routes for admin
 // GET /admin/users - get all users
@@ -45,36 +47,36 @@ router.use((req, res, next) => {
 
 // User routes for admin
 // GET /admin/users - get all users
-router.get('/users', getAllUsers);
+router.get("/users",auth,admin, getAllUsers);
 // GET /admin/users/:id - get user by id
-router.get('/users/:id', getUserById);
+router.get("/users/:id", auth, admin, getUserById);
 
 // DELETE /admin/users/:id - delete user
-router.delete('/users/:id', deleteUser);
+router.delete("/users/:id", auth, admin, deleteUser);
 
 // Project routes for admin
 // GET /admin/projects - get all projects
-router.get('/projects', getAllProjects);
+router.get("/projects", auth, admin, getAllProjects);
 // GET /admin/projects/:id - get project by id
-router.get('/projects/:id', getProjectById);
+router.get("/projects/:id", auth, admin, getProjectById);
 
 // DELETE /admin/projects/:id - delete project
-router.delete('/projects/:id', deleteProject);
+router.delete("/projects/:id", auth, admin, deleteProject);
 
 // Section routes for admin
 // GET /admin/sections - get all sections
-router.get('/sections', getAllSections);
+router.get("/sections", auth, admin, getAllSections);
 // GET /admin/sections/:id - get section by id
-router.get('/sections/:id', getSectionById);
+router.get("/sections/:id", auth, admin, getSectionById);
 // DELETE /admin/sections/:id - delete section
-router.delete('/sections/:id', deleteSection);
+router.delete("/sections/:id", auth, admin, deleteSection);
 
 // Task routes for admin
 // GET /admin/tasks - get all tasks
-router.get('/tasks', getAllTasks);
+router.get("/tasks", auth, admin, getAllTasks);
 // GET /admin/tasks/:id - get task by id
-router.get('/tasks/:id', getTaskById);
+router.get('/tasks/:id',auth, admin, getTaskById);
 // DELETE /admin/tasks/:id - delete task
-router.delete('/tasks/:id', deleteTask);
+router.delete('/tasks/:id',auth, admin, deleteTask);
 
 module.exports = router;

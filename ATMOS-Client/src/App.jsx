@@ -28,6 +28,7 @@ import { login } from "./features/userSlice";
 import { useDispatch } from "react-redux";
 import NoteEditor from "./pages/Notes/NoteEditor";
 import Page404 from "./pages/Extra/Page404";
+import RequireAuth from "./access-control/RequireAuth";
 
 // 6,50,000 + 2,50,000 + 1,00,000 + 9,10,000 + 1,00,000
 
@@ -50,7 +51,7 @@ const App = () => {
         },
       });
       const data = await res.json();
-      // console.log(data, "userInfo from appJS");
+      console.log(data);
       data["token"] = token;
       dispatch(login(data));
     }
@@ -63,61 +64,192 @@ const App = () => {
       <Router>
         <div className="App">
           <Routes>
-            <Route exact path="/" element={<HomePage />} />
-            <Route exact path="/notes" element={<Notes />} />
-            <Route exact path="/signup" element={<SignUp />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/profile" element={<UserProfile />} />
-            <Route exact path="/logout" element={<Logout />} />
-            <Route exact path="/home" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/message" element={<Chat />} />
-            <Route path="/createproject" element={<CreateProject />} />
+            <Route
+              exact
+              path="/"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <HomePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/notes"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <Notes />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/signup"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <SignUp />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/login"
+              element={
+               
+                  <Login />
+               
+              }
+            />
+            <Route
+              exact
+              path="/profile"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <UserProfile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/logout"
+              element={
+              
+                  <Logout />
+               
+              }
+            />
+            <Route
+              exact
+              path="/home"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <Home />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <Projects />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/message"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <Chat />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/createproject"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <CreateProject />
+                </RequireAuth>
+              }
+            />
             <Route
               exact
               path="/projects/:id/board"
-              element={<ProjectMainView Board />}
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <ProjectMainView Board />
+                </RequireAuth>
+              }
             />
-            <Route exact path="/noteeditor/:id" element={<NoteEditor />} />
+            <Route
+              exact
+              path="/noteeditor/:id"
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <NoteEditor />
+                </RequireAuth>
+              }
+            />
             <Route
               exact
               path="/projects/:id/overview"
-              element={<ProjectMainView Overview />}
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <ProjectMainView OverView />
+                </RequireAuth>
+              }
             />
             <Route
               exact
               path="/projects/:id/charts"
-              element={<ProjectMainView Charts />}
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <ProjectMainView Charts />
+                </RequireAuth>
+              }
             />
             <Route
               exact
               path="/projects/:id/timeline"
-              element={<ProjectMainView Timeline />}
+              element={
+                <RequireAuth allowedRoles={["user"]}>
+                  <ProjectMainView Timeline />
+                </RequireAuth>
+              }
             />
-            <Route path="/admin-portal" element={<HomeAdmin />} />
-            <Route exact path="/admin-portal/users" element={<UserList />} />
+            <Route
+              path="/admin-portal"
+              element={
+                <RequireAuth allowedRoles={["admin"]}>
+                  <HomeAdmin />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/admin-portal/users"
+              element={
+                <RequireAuth allowedRoles={["admin"]}>
+                  <UserList />
+                </RequireAuth>
+              }
+            />
             <Route
               exact
               path="/admin-portal/users/:id"
-              element={<UserSingle />}
+              element={
+                <RequireAuth allowedRoles={["admin"]}>
+                  <UserSingle />
+                </RequireAuth>
+              }
             />
             <Route
               exact
               path="/admin-portal/projects"
-              element={<ProjectList />}
+              element={
+                <RequireAuth allowedRoles={["admin"]}>
+                  <ProjectList />
+                </RequireAuth>
+              }
             />
-            <Route exact path="/admin-portal/tasks" element={<TaskList />} />
+            <Route
+              exact
+              path="/admin-portal/tasks"
+              element={
+                <RequireAuth allowedRoles={["admin"]}>
+                  <TaskList />
+                </RequireAuth>
+              }
+            />
             <Route
               exact
               path="/admin-portal/sections"
-              element={<SectionList />}
+              element={
+                <RequireAuth allowedRoles={["admin"]}>
+                  <SectionList />
+                </RequireAuth>
+              }
             />
-            <Route exact path="/admin-portal/login" element={<LoginAdmin />} />
-            <Route
-              exact
-              path="/admin-portal/logout"
-              element={<LogoutAdmin />}
-            />
+           
             <Route exact path="/aboutUs" element={<AboutUS />} />
             <Route exact path="/contactUs" element={<Contact />} />
 

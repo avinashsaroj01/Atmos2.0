@@ -29,7 +29,7 @@ const UserSingle = () => {
       setProjects(pdata.projects);
     }
     getUser();
-  }, [user, projects]);
+  }, []);
 
   return (
     <div className="single">

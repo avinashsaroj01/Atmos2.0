@@ -85,7 +85,7 @@ const ProfileMenu = ({ userInfo }) => {
                 <Menu.Item icon={<IconStar size={14} color={theme.colors.yellow[6]} stroke={1.5} />}>
                     <Link to="/admin-portal">Admin Portal</Link>
                 </Menu.Item>
-                <Menu.Item icon={<IconLogout size={14} stroke={1.5} />}><Link to="/admin-portal/logout">Log Out</Link></Menu.Item>
+                <Menu.Item icon={<IconLogout size={14} stroke={1.5} />}><Link to="/logout">Log Out</Link></Menu.Item>
 
                 <Menu.Divider />
 

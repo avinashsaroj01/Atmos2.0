@@ -19,42 +19,46 @@ const HomeAdmin = () => {
   const [sections, setSections] = useState([]);
   const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
-    async function getLengths() {
-      const adminId = localStorage.getItem("adminId");
-      const userRes2 = await fetch(`${backendUrl}/admin/users/${adminId}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const userData2 = await userRes2.json();
-      setUser(userData2.user);
-      const res = await fetch(`${backendUrl}/admin/projects`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const userRes = await fetch(`${backendUrl}/admin/users`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const taskRes = await fetch(`${backendUrl}/admin/tasks`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const sectionRes = await fetch(`${backendUrl}/admin/sections`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      const userData = await userRes.json();
-      const taskData = await taskRes.json();
-      const sectionData = await sectionRes.json();
-      setProjects(data.projects.length);
-      setUsers(userData.users.length);
-      setTasks(taskData.tasks.length);
-      setSections(sectionData.sections.length);
-    }
-    getLengths();
-  }, [projects, users, sections, tasks]);
+ useEffect(() => {
+   async function getLengths() {
+     const token = localStorage.getItem("token");
+
+     const headers = {
+       "Content-Type": "application/json",
+       Authorization: `Bearer ${token}`,
+     };
+
+     const adminId = localStorage.getItem("adminId");
+
+     const userRes2 = await fetch(`${backendUrl}/admin/users/${adminId}`, {
+       headers,
+     });
+     const userData2 = await userRes2.json();
+ setUser(userData2.user);
+     const res = await fetch(`${backendUrl}/admin/projects`, { headers });
+     const userRes = await fetch(`${backendUrl}/admin/users`, { headers });
+     const taskRes = await fetch(`${backendUrl}/admin/tasks`, { headers });
+     const sectionRes = await fetch(`${backendUrl}/admin/sections`, {
+       headers,
+     });
+
+     const data = await res.json();
+     const userData = await userRes.json();
+     const taskData = await taskRes.json();
+     const sectionData = await sectionRes.json();
+
+     setProjects(data.projects.length);
+     setUsers(userData.users.length);
+     setTasks(taskData.tasks.length);
+     setSections(sectionData.sections.length);
+   }
+
+   getLengths();
+ }, []);
+
+  useEffect(()=>{
+    console.log(user)
+  },[])
   return (
     <div className="home">
       {/* <Sidebar /> */}

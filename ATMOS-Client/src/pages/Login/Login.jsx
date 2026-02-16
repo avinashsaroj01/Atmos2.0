@@ -14,29 +14,6 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const loginPath= process.env.REACT_APP_BACKEND_URL
-    //     const res = await fetch(`${loginPath}/user/login`, {
-    //         method: 'POST',
-    //         mode: 'cors',
-    //         headers: {
-    //             'Content-type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ email, password })
-    //     });
-
-    //     const data = await res.json();
-    //     console.log(data);
-    //     if (!data.success) {
-    //         alert(data.message);
-    //     }
-    //     else {
-    //         // dispatch(login(data));
-    //         localStorage.setItem('token', data.token);
-    //         navigate('/home');
-    //     }
-    // }
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -58,14 +35,23 @@ function Login() {
       });
 
       const data = await res.json();
-      console.log(data);
+      console.log(data.user);
+      console.log(data.user._id);
 
       if (!data.success) {
         alert(data.message);
-      } else {
+      } else if(data.user.role==='user'){
         // dispatch(login(data));
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role",data.user.role);
         navigate("/home");
+    }
+      else{
+         localStorage.setItem("token", data.token);
+         localStorage.setItem("adminId",data.user._id);
+         localStorage.setItem("role",data.user.role);
+
+        navigate("/admin-portal");
       }
     };
     

@@ -12,22 +12,20 @@ function LoginAdmin() {
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
+        console.log(email, password);
         e.preventDefault();
         if(!email || !password){
             alert("Please fill all the fields");
             return;
         }
-        if((email==="dushyant@gmail.com") && password==="dushyant123"){
-            localStorage.setItem('adminId', "644a4fa403a61fa7629ae618");
-            navigate('/admin-portal/');
-        }
-        else
-        if((email==="dushyant@atmos.in") && password==="dushyant123"){
-            localStorage.setItem('adminId', "641c25296ea464a6a6799a7e");
-            navigate('/admin-portal/');
-        }
-        else{
-            alert("Invalid credentials, You are not an admin");
+        if (email === "admin@gmail.com" && password === "admin123") {
+          localStorage.setItem("adminId", "644a4fa403a61fa7629ae618");
+          navigate("/admin-portal/");
+        } else if (email === "avinash@atmos.in" && password === "avinash123") {
+          localStorage.setItem("adminId", "641c25296ea464a6a6799a7e");
+          navigate("/admin-portal/");
+        } else {
+          alert("Invalid credentials, You are not an admin");
         }
     }
 
