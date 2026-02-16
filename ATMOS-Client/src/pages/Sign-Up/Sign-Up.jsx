@@ -54,36 +54,10 @@ function SignUp() {
         return formIsValid;
     }
 
-    //write handle submit to add user to node server
-    // const handleSubmit = async (e) => {
-
-    //     console.log(email, password, name, confirmPassword);
-
-    //     e.preventDefault();
-    //     console.log("Form submitting...");
-    //     console.log(handleValidation());
-    //     if (handleValidation()) {
-    //         console.log("Form submitted");
-    //         const res = await fetch(process.env.REACT_APP_BACKEND_URL + "/user/register", {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify({ email: email, password: password, userName: name }),
-    //         });
-    //         const data = await res.json();
-    //         console.log(data);
-    //         if (data.success) {
-    //             navigate("/login");
-    //         }
-    //         else {
-    //             alert(data.message);
-    //         }
-    //     }
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch("http://localhost:4000/user/register", {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
